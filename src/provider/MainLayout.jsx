@@ -1,5 +1,6 @@
 import { Outlet, NavLink, useNavigate, useLocation, Navigate } from "react-router-dom";
-import { useAuth } from "./AuthContextProvider";
+import { useAuth } from "./authContext";
+import "./MainLayout.css";
 
 export default function MainLayout() {
     const { isAuthenticated, loading, logout } = useAuth();
@@ -7,12 +8,6 @@ export default function MainLayout() {
     const navigate = useNavigate();
 
     if (loading) return <div>Loading...</div>;
-
-    const linkStyle = ({ isActive }) => ({
-        color: isActive ? "var(--accent)" : "var(--ink-700)",
-        fontWeight: isActive ? "700" : "500",
-        textDecoration: "none",
-    });
 
     const handlelogout = () => {
         logout();
@@ -24,17 +19,8 @@ export default function MainLayout() {
     }
 
     return (
-        <div>
-            <header
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "12px 20px",
-                    borderBottom: "2px solid rgba(43,31,24,0.06)",
-                    background: "linear-gradient(90deg, rgba(255,250,242,1) 0%, rgba(255,248,236,1) 100%)",
-                }}
-            >
+        <div className="main-shell">
+            <header className="main-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <img
                         src="/logo.png"
@@ -50,8 +36,6 @@ export default function MainLayout() {
                     </div>
                 </div>
 
-                {/* Top header only shows brand and logout. Primary navigation lives inside the Home page */}
-
                 <button
                     type="button"
                     onClick={handlelogout}
@@ -61,18 +45,31 @@ export default function MainLayout() {
                 </button>
             </header>
 
-            <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "32px 24px" }}>
+            <nav className="main-nav">
+                <div className="nav-inner">
+                    <NavLink to="/app" end className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                        Dashboard
+                    </NavLink>
+                    <NavLink to="/app/withdraw" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                        Withdraw
+                    </NavLink>
+                    <NavLink to="/app/deposit" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                        Deposit
+                    </NavLink>
+                    <NavLink to="/app/audit" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                        Audit
+                    </NavLink>
+                    <NavLink to="/app/profile" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+                        Profile
+                    </NavLink>
+                </div>
+            </nav>
+
+            <main className="main-content">
                 <Outlet />
             </main>
 
-            <footer
-                style={{
-                    textAlign: "center",
-                    padding: "20px",
-                    borderTop: "1px solid rgba(43,31,24,0.06)",
-                    color: "var(--ink-300)",
-                }}
-            >
+            <footer className="main-footer">
                 <p>Bank of Kathmandu - Demo App</p>
             </footer>
         </div>

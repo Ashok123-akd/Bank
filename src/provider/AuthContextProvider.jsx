@@ -1,6 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react";
-
-const AuthContext = createContext(undefined);
+import { useState } from "react";
+import { AuthContext } from "./authContext";
 
 // Simulated auth service (replace with real API in production)
 const authService = {
@@ -24,17 +23,16 @@ function generateAccountNumber() {
 }
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    // Check for stored session on mount
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+    const [user, setUser] = useState(() => {
+        try {
+            const storedUser = localStorage.getItem("user");
+            return storedUser ? JSON.parse(storedUser) : null;
+        } catch (err) {
+            console.warn("Failed to load stored user", err);
+            return null;
         }
-        setLoading(false);
-    }, []);
+    });
+    const loading = false;
 
     const login = async (email, password) => {
         // First check registered users stored in localStorage (demo)
@@ -111,10 +109,3 @@ export function AuthProvider({ children }) {
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-export function useAuth() {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-}   

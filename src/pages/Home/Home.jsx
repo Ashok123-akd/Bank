@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useAuth } from "../../provider/AuthContextProvider";
-import { NavLink } from 'react-router-dom';
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../provider/authContext";
 import "./Home.css";
 import {
   depositFunds,
@@ -9,9 +8,9 @@ import {
   transferFunds,
 } from "../../services/api";
 
-const currency = new Intl.NumberFormat("en-US", {
+const currency = new Intl.NumberFormat("en-NP", {
   style: "currency",
-  currency: "USD",
+  currency: "NPR",
   maximumFractionDigits: 2,
 });
 
@@ -26,9 +25,17 @@ const quickServices = [
   { id: "insurance", title: "Insurance", subtitle: "Policy active", tag: "Cover" },
 ];
 
+const buildProfileForm = (user) => ({
+  firstName: user?.firstName || user?.name?.split(" ")[0] || "",
+  lastName: user?.lastName || user?.name?.split(" ").slice(1).join(" ") || "",
+  address: user?.address || "",
+  email: user?.email || "",
+  accountNumber: user?.accountNumber || "",
+});
+
 const Home = () => {
   const [balance, setBalance] = useState(0);
-  const [walletName] = useState("Rhythm Wallet");
+  const walletName = "Bank of Kathmandu";
   const [depositAmount, setDepositAmount] = useState("");
   const [transferForm, setTransferForm] = useState({
     to: "",
@@ -46,7 +53,6 @@ const Home = () => {
 
   useEffect(() => {
     let mounted = true;
-    setLoading(true);
     getWalletSnapshot()
       .then((data) => {
         if (!mounted) return;
@@ -65,32 +71,9 @@ const Home = () => {
     };
   }, []);
 
-  // load registered users for recipient lookup
-  const [registeredUsers, setRegisteredUsers] = useState([]);
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem('registered_users');
-      setRegisteredUsers(raw ? JSON.parse(raw) : []);
-    } catch (err) {
-      setRegisteredUsers([]);
-    }
-  }, []);
-
   const { user: currentUser } = useAuth();
   const [editingProfile, setEditingProfile] = useState(false);
-  const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', address: '', email: '', accountNumber: '' });
-
-  useEffect(() => {
-    if (currentUser) {
-      setProfileForm({
-        firstName: currentUser.firstName || currentUser.name?.split(' ')[0] || '',
-        lastName: currentUser.lastName || currentUser.name?.split(' ').slice(1).join(' ') || '',
-        address: currentUser.address || '',
-        email: currentUser.email || '',
-        accountNumber: currentUser.accountNumber || '',
-      });
-    }
-  }, [currentUser]);
+  const [profileForm, setProfileForm] = useState(() => buildProfileForm(currentUser));
 
   const saveProfile = () => {
     try {
@@ -135,7 +118,7 @@ const Home = () => {
         const list = raw ? JSON.parse(raw) : [];
         const found = list.find(u => u.accountNumber === transferForm.to || u.email === transferForm.to || `${u.firstName} ${u.lastName}` === transferForm.to);
         if (found) toLabel = `${found.firstName || found.name} (${found.accountNumber})`;
-      } catch (err) {
+      } catch {
         // ignore
       }
 
@@ -175,22 +158,6 @@ const Home = () => {
 
   return (
     <div className="home">
-      <nav className="home-nav">
-        <div className="nav-inner">
-          <NavLink to="/app" end className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            Dashboard
-          </NavLink>
-          <NavLink to="/app/withdraw" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            Withdraw
-          </NavLink>
-          <NavLink to="/app/deposit" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            Deposit
-          </NavLink>
-          <NavLink to="/app" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
-            Profile
-          </NavLink>
-        </div>
-      </nav>
       <div className="home-hero">
         <div className="hero-card">
           <div>
@@ -213,7 +180,15 @@ const Home = () => {
               <div style={{fontSize:12,color:'var(--ink-500)',marginTop:6}}>Account: <strong>{currentUser?.accountNumber || '—'}</strong></div>
               <div style={{marginTop:8,display:'flex',gap:8}}>
                 <button className="ghost" onClick={() => { navigator.clipboard?.writeText(currentUser?.accountNumber || ''); }}>Copy</button>
-                <button className="ghost" onClick={() => setEditingProfile(true)}>Edit Profile</button>
+                <button
+                  className="ghost"
+                  onClick={() => {
+                    setProfileForm(buildProfileForm(currentUser));
+                    setEditingProfile(true);
+                  }}
+                >
+                  Edit Profile
+                </button>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './Audit.css';
 
 function parseTextBill(text) {
@@ -40,8 +40,6 @@ function parseTextBill(text) {
 }
 
 export default function Audit(){
-  const [purchase, setPurchase] = useState(null);
-  const [sale, setSale] = useState(null);
   const [report, setReport] = useState(null);
   const [error, setError] = useState('');
 
@@ -62,9 +60,6 @@ export default function Audit(){
       const stext = await readFile(saleFile);
       const parsedP = parseTextBill(ptext || '');
       const parsedS = parseTextBill(stext || '');
-      setPurchase(parsedP);
-      setSale(parsedS);
-
       // build comparison
       const summary = {
         purchaseTotal: parsedP.total,
@@ -111,7 +106,33 @@ export default function Audit(){
   };
 
   return (
-    <div className="panel audit-panel">
+    <div className="audit-page">
+      <section className="audit-hero">
+        <div>
+          <p className="eyebrow">Revenue Assurance</p>
+          <h2>Audit & Leakage Control</h2>
+          <p className="muted">
+            Compare purchase and sale bills to detect mismatches, missing items,
+            and margin gaps before they impact revenue.
+          </p>
+        </div>
+        <div className="audit-logo">
+          <img
+            src="/logo.png"
+            alt="logo"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/fallback-logo.svg";
+            }}
+          />
+          <div>
+            <div className="hero-caption">Bank of Kathmandu</div>
+            <div className="hero-sub">Audit powered by your contribution</div>
+          </div>
+        </div>
+      </section>
+
+      <div className="panel audit-panel">
       <header className="panel-header">
         <div style={{display:'flex',gap:12,alignItems:'center'}}>
           <img src="/logo.png" alt="logo" style={{width:48,height:48,borderRadius:'50%'}} onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/fallback-logo.svg'}} />
@@ -131,7 +152,7 @@ export default function Audit(){
         </label>
         <div style={{display:'flex',gap:8,marginTop:8}}>
           <button className="accent" type="submit">Compare Bills</button>
-          <button type="button" className="ghost" onClick={()=>{setPurchase(null); setSale(null); setReport(null); setError('');}}>Reset</button>
+          <button type="button" className="ghost" onClick={()=>{setReport(null); setError('');}}>Reset</button>
         </div>
       </form>
 
@@ -165,6 +186,7 @@ export default function Audit(){
         </div>
       ) : null}
 
+      </div>
     </div>
   );
 }

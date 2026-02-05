@@ -1,4 +1,14 @@
-.audit-panel{max-width:980px;margin:0 auto}
+.audit-page{display:flex;flex-direction:column;gap:24px}
+.audit-hero{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:24px 28px;background:linear-gradient(120deg,var(--sand),var(--mint));border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.audit-logo{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.8);border-radius:14px;padding:12px 14px;border:1px solid var(--border)}
+.audit-logo img{width:64px;height:64px;border-radius:14px;object-fit:cover;box-shadow:0 10px 22px rgba(43,31,24,0.12)}
+.hero-caption{font-weight:700}
+.hero-sub{font-size:12px;color:var(--ink-500)}
+.audit-panel{max-width:980px;margin:0 auto;width:100%}
 .audit-form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .audit-form label{display:flex;flex-direction:column;gap:6px;min-width:240px}
 .audit-report{margin-top:16px;background:var(--surface);padding:12px;border-radius:10px;border:1px solid var(--border)}
+
+@media (max-width: 760px){
+  .audit-hero{flex-direction:column;align-items:flex-start}
+}

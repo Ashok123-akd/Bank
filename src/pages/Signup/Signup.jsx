@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Card, Input, Typography, Form, Button, message } from 'antd';
-import { useAuth } from '../../provider/AuthContextProvider';
+import { useAuth } from '../../provider/authContext';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,6 +39,13 @@ const signupSchema = Yup.object({
     .required('Confirm password is required'),
 });
 
+const generateAccountNumber = () =>
+  `AC${Date.now().toString().slice(-8)}${Math.floor(Math.random() * 900 + 100)}`;
+
+const generateUserId = () => Date.now();
+
+const generateCreatedAt = () => new Date().toISOString();
+
 function Signup() {
   const {
     control,
@@ -60,19 +66,17 @@ function Signup() {
   const onSubmit = async (data) => {
     try {
       // Generate a simple unique account number: AC + timestamp + random 3 digits
-      const accountNumber = `AC${Date.now().toString().slice(-8)}${Math.floor(
-        Math.random() * 900 + 100
-      )}`;
+      const accountNumber = generateAccountNumber();
 
       const user = {
-        id: Date.now(),
+        id: generateUserId(),
         firstName: data.firstName,
         lastName: data.lastName,
         address: data.address,
         email: data.email,
         password: data.password,
         accountNumber,
-        createdAt: new Date().toISOString(),
+        createdAt: generateCreatedAt(),
       };
 
       // Save to localStorage (demo persistence)
@@ -92,7 +96,7 @@ function Signup() {
       try {
         await login(user.email, user.password);
         navigate('/app');
-      } catch (err) {
+      } catch {
         // if auto-login fails, go to login page
         navigate('/login');
       }
