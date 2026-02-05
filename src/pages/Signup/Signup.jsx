@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import { Card, Input, Typography, Form, Button } from 'antd';
+import { Link, useNavigate } from "react-router-dom";
+import { Card, Input, Typography, Form, Button, message } from 'antd';
+import { useAuth } from '../../provider/AuthContextProvider';
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import './Signup.css';
+import BrandLogo from '../../components/BrandLogo';
 
 const { Title } = Typography;
 
@@ -56,13 +58,59 @@ function Signup() {
   });
 
   const onSubmit = async (data) => {
-    console.log('Signup data:', data);
-    // Call signup API here
+    try {
+      // Generate a simple unique account number: AC + timestamp + random 3 digits
+      const accountNumber = `AC${Date.now().toString().slice(-8)}${Math.floor(
+        Math.random() * 900 + 100
+      )}`;
+
+      const user = {
+        id: Date.now(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        email: data.email,
+        password: data.password,
+        accountNumber,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Save to localStorage (demo persistence)
+      const raw = localStorage.getItem('registered_users');
+      const list = raw ? JSON.parse(raw) : [];
+      // prevent duplicate email
+      const exists = list.find(u => u.email === user.email);
+      if (exists) {
+        message.error('An account with this email already exists. Please login.');
+        return;
+      }
+      list.push(user);
+      localStorage.setItem('registered_users', JSON.stringify(list));
+
+      message.success(`Account created. Your account number: ${accountNumber}`);
+      // auto-login the new user
+      try {
+        await login(user.email, user.password);
+        navigate('/app');
+      } catch (err) {
+        // if auto-login fails, go to login page
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('signup error', err);
+      message.error('Failed to create account.');
+    }
   };
+
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   return (
     <div className="container">
       <Card className="card">
+        <div className="brand-wrap">
+          <BrandLogo size={76} />
+        </div>
         <Title level={3} style={{ textAlign: 'center' }}>
           Signup
         </Title>

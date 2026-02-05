@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../provider/AuthContextProvider";
+import { NavLink } from 'react-router-dom';
 import "./Home.css";
 import {
   depositFunds,
@@ -63,6 +65,49 @@ const Home = () => {
     };
   }, []);
 
+  // load registered users for recipient lookup
+  const [registeredUsers, setRegisteredUsers] = useState([]);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('registered_users');
+      setRegisteredUsers(raw ? JSON.parse(raw) : []);
+    } catch (err) {
+      setRegisteredUsers([]);
+    }
+  }, []);
+
+  const { user: currentUser } = useAuth();
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', address: '', email: '', accountNumber: '' });
+
+  useEffect(() => {
+    if (currentUser) {
+      setProfileForm({
+        firstName: currentUser.firstName || currentUser.name?.split(' ')[0] || '',
+        lastName: currentUser.lastName || currentUser.name?.split(' ').slice(1).join(' ') || '',
+        address: currentUser.address || '',
+        email: currentUser.email || '',
+        accountNumber: currentUser.accountNumber || '',
+      });
+    }
+  }, [currentUser]);
+
+  const saveProfile = () => {
+    try {
+      const raw = localStorage.getItem('registered_users');
+      const list = raw ? JSON.parse(raw) : [];
+      const idx = list.findIndex(u => u.email === profileForm.email || u.accountNumber === profileForm.accountNumber);
+      const updated = { ...list[idx], ...profileForm };
+      if (idx >= 0) list[idx] = updated; else list.push(updated);
+      localStorage.setItem('registered_users', JSON.stringify(list));
+      localStorage.setItem('user', JSON.stringify(updated));
+      // update auth context stored user by reloading
+      window.location.reload();
+    } catch (err) {
+      console.error('profile save', err);
+    }
+  };
+
   const handleDeposit = async (event) => {
     event.preventDefault();
     setError("");
@@ -83,8 +128,19 @@ const Home = () => {
     setError("");
     setMessage("");
     try {
+      // if recipient is an account number, try to find name
+      let toLabel = transferForm.to;
+      try {
+        const raw = localStorage.getItem('registered_users');
+        const list = raw ? JSON.parse(raw) : [];
+        const found = list.find(u => u.accountNumber === transferForm.to || u.email === transferForm.to || `${u.firstName} ${u.lastName}` === transferForm.to);
+        if (found) toLabel = `${found.firstName || found.name} (${found.accountNumber})`;
+      } catch (err) {
+        // ignore
+      }
+
       const data = await transferFunds({
-        to: transferForm.to,
+        to: toLabel,
         amount: transferForm.amount,
       });
       setBalance(data.balance);
@@ -119,6 +175,22 @@ const Home = () => {
 
   return (
     <div className="home">
+      <nav className="home-nav">
+        <div className="nav-inner">
+          <NavLink to="/app" end className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/app/withdraw" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
+            Withdraw
+          </NavLink>
+          <NavLink to="/app/deposit" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
+            Deposit
+          </NavLink>
+          <NavLink to="/app" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>
+            Profile
+          </NavLink>
+        </div>
+      </nav>
       <div className="home-hero">
         <div className="hero-card">
           <div>
@@ -128,10 +200,22 @@ const Home = () => {
               Secure wallet for deposits, transfers, and utility payments.
             </p>
           </div>
-          <div className="balance">
+          <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:12}}>
+            <div className="balance">
             <span>Total Balance</span>
             <strong>{currency.format(balance)}</strong>
             <p>Available: {currency.format(available)}</p>
+            </div>
+
+            <div style={{background:'rgba(255,255,255,0.9)',padding:'8px 12px',borderRadius:10,border:'1px solid var(--border)'}}>
+              <div style={{fontSize:12,color:'var(--ink-500)'}}>Logged in as</div>
+              <div style={{fontWeight:700}}>{currentUser?.firstName || currentUser?.name || currentUser?.email}</div>
+              <div style={{fontSize:12,color:'var(--ink-500)',marginTop:6}}>Account: <strong>{currentUser?.accountNumber || '—'}</strong></div>
+              <div style={{marginTop:8,display:'flex',gap:8}}>
+                <button className="ghost" onClick={() => { navigator.clipboard?.writeText(currentUser?.accountNumber || ''); }}>Copy</button>
+                <button className="ghost" onClick={() => setEditingProfile(true)}>Edit Profile</button>
+              </div>
+            </div>
           </div>
         </div>
         <div className="hero-grid">
@@ -326,6 +410,37 @@ const Home = () => {
                     ? "Transfer completed instantly via wallet network."
                     : "Recorded in your wallet activity."}
                 </p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      ) : null}
+      {editingProfile ? (
+        <div className="drawer-overlay" onClick={() => setEditingProfile(false)}>
+          <aside className="drawer" onClick={(event) => event.stopPropagation()}>
+            <div className="drawer-header">
+              <div>
+                <p className="eyebrow">Edit Profile</p>
+                <h3>Profile</h3>
+              </div>
+              <button type="button" className="ghost" onClick={() => setEditingProfile(false)}>Close</button>
+            </div>
+            <div className="drawer-body">
+              <label>First name
+                <input value={profileForm.firstName} onChange={(e)=>setProfileForm(p=>({...p,firstName:e.target.value}))} />
+              </label>
+              <label>Last name
+                <input value={profileForm.lastName} onChange={(e)=>setProfileForm(p=>({...p,lastName:e.target.value}))} />
+              </label>
+              <label>Address
+                <input value={profileForm.address} onChange={(e)=>setProfileForm(p=>({...p,address:e.target.value}))} />
+              </label>
+              <label>Email
+                <input value={profileForm.email} onChange={(e)=>setProfileForm(p=>({...p,email:e.target.value}))} />
+              </label>
+              <div style={{display:'flex',gap:8,marginTop:12}}>
+                <button className="accent" onClick={()=>{saveProfile(); setEditingProfile(false);}}>Save</button>
+                <button className="ghost" onClick={()=>setEditingProfile(false)}>Cancel</button>
               </div>
             </div>
           </aside>

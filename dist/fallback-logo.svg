@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="100%" height="100%" fill="#fff8f0"/>
+  <g transform="translate(32,36)" fill="none" stroke="#FB8C00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 6c18 0 34 14 40 32 6 18 6 36-6 52-12 16-36 28-36 28s-24-12-36-28c-12-16-12-34-6-52C62 20 78 6 96 6z"/>
+    <path d="M40 66c-12 16-18 34-12 52 6 18 22 32 40 32 18 0 34-14 40-32 6-18 0-36-12-52"/>
+  </g>
+  <text x="50%" y="86%" font-family="Manrope, Arial, sans-serif" font-size="20" fill="#6b4423" text-anchor="middle">Bank of Kathmandu</text>
+</svg>

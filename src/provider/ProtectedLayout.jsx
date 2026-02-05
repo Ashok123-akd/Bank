@@ -1,6 +1,6 @@
 
-import { Navigate, Outlet, useLocation } from "react-router";
-import { useAuth } from "./provider/AuthContextProvider";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "./AuthContextProvider";
 
 function ProtectedLayout() {
     const { isAuthenticated, loading } = useAuth();

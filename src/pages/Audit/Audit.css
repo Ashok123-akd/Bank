@@ -1,0 +1,4 @@
+.audit-panel{max-width:980px;margin:0 auto}
+.audit-form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.audit-form label{display:flex;flex-direction:column;gap:6px;min-width:240px}
+.audit-report{margin-top:16px;background:var(--surface);padding:12px;border-radius:10px;border:1px solid var(--border)}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import '../Signup/Signup.css';
+import BrandLogo from '../../components/BrandLogo';
 import { Card, Input, Typography, Form, Button, message } from 'antd'
 import { useForm, Controller } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -40,7 +42,7 @@ function Login() {
       setLoginError('');
       await login(data.email, data.password);
       message.success('Login successful!');
-      navigate('/'); // Redirect to home page
+      navigate('/app'); // Redirect to app dashboard
     } catch (error) {
       setLoginError(error.message);
       message.error(error.message);
@@ -49,6 +51,9 @@ function Login() {
   return (
     <div className="container">
       <Card className="card">
+        <div className="brand-wrap">
+          <BrandLogo size={76} />
+        </div>
         <Title level={3} style={{ textAlign: 'center' }}>
           Login
         </Title>
@@ -92,7 +97,7 @@ function Login() {
 
 
         </Form>
-        <p>If you dont't have account <Link to="/">Click here</Link></p>
+        <p>If you don't have an account <Link to="/signup">Click here</Link></p>
       </Card>
     </div>
   )

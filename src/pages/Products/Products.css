@@ -1,0 +1,5 @@
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+.product-card{background:var(--surface);padding:18px;border-radius:12px;border:1px solid var(--border);display:flex;flex-direction:column;gap:12px}
+.product-card h4{margin:0}
+.product-card p{margin:0;color:var(--ink-500)}
+.product-card .accent{background:var(--accent);border:none;color:#fff;padding:10px;border-radius:10px;cursor:pointer}
