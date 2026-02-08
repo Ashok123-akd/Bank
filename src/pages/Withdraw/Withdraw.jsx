@@ -98,6 +98,33 @@ export default function Withdraw() {
 
   return (
     <div className="wallet-page">
+      <section className="withdraw-hero">
+        <div className="withdraw-hero-copy">
+          <p className="eyebrow">Payout Center</p>
+          <h2>Withdraw from KathmanduWallet</h2>
+          <p className="muted">
+            Move funds out securely with clear destination routing.
+          </p>
+          <div className="hero-media-stack">
+            <img
+              src="/banner.jpeg"
+              alt="Withdraw hero banner"
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+            />
+            <img
+              src="/banner2.png"
+              alt="Withdraw secondary banner"
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+            />
+          </div>
+        </div>
+        <div className="withdraw-hero-card">
+          <span>Total balance</span>
+          <strong>{currency.format(balance)}</strong>
+          <p>Available to withdraw: {currency.format(available)}</p>
+        </div>
+      </section>
+
       <section className="panel">
         <header className="panel-header">
           <div>

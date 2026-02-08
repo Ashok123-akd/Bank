@@ -115,6 +115,16 @@ export default function Audit(){
             Compare purchase and sale bills to detect mismatches, missing items,
             and margin gaps before they impact revenue.
           </p>
+          <div className="audit-hero-media">
+            <img
+              src="/two.jpeg"
+              alt="Audit hero banner"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/fallback-logo.svg";
+              }}
+            />
+          </div>
         </div>
         <div className="audit-logo">
           <img

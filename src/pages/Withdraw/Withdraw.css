@@ -6,6 +6,69 @@
   gap: 24px;
 }
 
+.withdraw-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr);
+  gap: 20px;
+  padding: 28px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, var(--sand), var(--mint));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.withdraw-hero-copy h2 {
+  margin: 6px 0 8px;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-size: 28px;
+}
+
+.hero-media-stack {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.hero-media-stack img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+}
+
+.withdraw-hero-card {
+  align-self: center;
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.withdraw-hero-card span {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-500);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.withdraw-hero-card strong {
+  display: block;
+  font-size: 26px;
+  margin-top: 8px;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.withdraw-hero-card p {
+  margin: 8px 0 0;
+  color: var(--ink-500);
+  font-size: 13px;
+}
+
 .wallet-actions {
   display: flex;
   align-items: center;
@@ -178,5 +241,13 @@
   .wallet-actions {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .withdraw-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-media-stack img {
+    height: 180px;
   }
 }

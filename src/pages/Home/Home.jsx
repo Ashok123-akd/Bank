@@ -193,6 +193,13 @@ const Home = () => {
             </div>
           </div>
         </div>
+        <div className="hero-media">
+          <img
+            src="/banner2.png"
+            alt="KathmanduWallet hero banner"
+            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+          />
+        </div>
         <div className="hero-grid">
           <div className="stat-card">
             <span>Monthly Inflow</span>
