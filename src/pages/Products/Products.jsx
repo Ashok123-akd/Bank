@@ -21,7 +21,7 @@ export default function Products(){
         {products.map(p => (
           <div key={p.id} className="product-card">
             <div style={{display:'flex',alignItems:'center',gap:12}}>
-              <img src="/logo.png" alt="logo" style={{width:36,height:36,borderRadius:8,objectFit:'cover'}} onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/fallback-logo.svg'}} />
+              <img src="/logo.jpeg" alt="KathmanduWallet logo" style={{width:36,height:36,borderRadius:8,objectFit:'cover'}} onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/fallback-logo.svg'}} />
               <h4 style={{margin:0}}>{p.title}</h4>
             </div>
             <p>{p.desc}</p>

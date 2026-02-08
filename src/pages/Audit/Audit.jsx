@@ -118,15 +118,15 @@ export default function Audit(){
         </div>
         <div className="audit-logo">
           <img
-            src="/logo.png"
-            alt="logo"
+            src="/logo.jpeg"
+            alt="KathmanduWallet logo"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/fallback-logo.svg";
             }}
           />
           <div>
-            <div className="hero-caption">Bank of Kathmandu</div>
+            <div className="hero-caption">KathmanduWallet</div>
             <div className="hero-sub">Audit powered by your contribution</div>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function Audit(){
       <div className="panel audit-panel">
       <header className="panel-header">
         <div style={{display:'flex',gap:12,alignItems:'center'}}>
-          <img src="/logo.png" alt="logo" style={{width:48,height:48,borderRadius:'50%'}} onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/fallback-logo.svg'}} />
+          <img src="/logo.jpeg" alt="KathmanduWallet logo" style={{width:48,height:48,borderRadius:'50%'}} onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/fallback-logo.svg'}} />
           <div>
             <h3>Audit - Bill Comparison</h3>
             <p>Upload purchase and sale bills to identify gaps and mismatches.</p>

@@ -23,16 +23,16 @@ export default function MainLayout() {
             <header className="main-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <img
-                        src="/logo.png"
-                        alt="Bank logo"
+                        src="/logo.jpeg"
+                        alt="KathmanduWallet logo"
                         width={52}
                         height={52}
                         style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 6px 18px rgba(43,31,24,0.12)' }}
                         onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
                     />
                     <div>
-                        <h1 style={{ margin: 0, fontSize: 20 }}>Bank of Kathmandu</h1>
-                        <div style={{ fontSize: 12, color: '#6b584d' }}>Secure wallet demo</div>
+                        <h1 style={{ margin: 0, fontSize: 20 }}>KathmanduWallet</h1>
+                        <div style={{ fontSize: 12, color: '#6b584d' }}>Secure wallet experience</div>
                     </div>
                 </div>
 
@@ -70,7 +70,7 @@ export default function MainLayout() {
             </main>
 
             <footer className="main-footer">
-                <p>Bank of Kathmandu - Demo App</p>
+                <p>KathmanduWallet - Demo App</p>
             </footer>
         </div>
     );

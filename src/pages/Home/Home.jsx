@@ -35,7 +35,7 @@ const buildProfileForm = (user) => ({
 
 const Home = () => {
   const [balance, setBalance] = useState(0);
-  const walletName = "Bank of Kathmandu";
+  const walletName = "KathmanduWallet";
   const [depositAmount, setDepositAmount] = useState("");
   const [transferForm, setTransferForm] = useState({
     to: "",
@@ -211,6 +211,41 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <section className="panel gallery-panel">
+        <header className="panel-header">
+          <div>
+            <h3>Wallet Highlights</h3>
+            <p>Moments from KathmanduWallet services and offers.</p>
+          </div>
+        </header>
+        <div className="gallery-grid">
+          <figure className="gallery-card">
+            <img
+              src="/banner.jpeg"
+              alt="KathmanduWallet community event"
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+            />
+            <figcaption>Community rewards drive</figcaption>
+          </figure>
+          <figure className="gallery-card">
+            <img
+              src="/banner2.png"
+              alt="KathmanduWallet merchant partners"
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+            />
+            <figcaption>New merchant partners</figcaption>
+          </figure>
+          <figure className="gallery-card">
+            <img
+              src="/two.jpeg"
+              alt="KathmanduWallet lifestyle offering"
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.svg'; }}
+            />
+            <figcaption>Lifestyle cashback offers</figcaption>
+          </figure>
+        </div>
+      </section>
 
       <div className="home-body">
         <section className="panel">

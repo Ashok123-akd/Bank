@@ -1,10 +1,10 @@
 import React from 'react';
 
-export default function BrandLogo({ size = 72, alt = 'Bank logo' }) {
+export default function BrandLogo({ size = 72, alt = 'KathmanduWallet logo' }) {
   const px = typeof size === 'number' ? `${size}px` : size;
   return (
     <img
-      src="/logo.png"
+      src="/logo.jpeg"
       alt={alt}
       width={size}
       height={size}

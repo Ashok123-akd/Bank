@@ -66,17 +66,21 @@ export async function getWalletSnapshot() {
 	return withLatency(state);
 }
 
-export async function depositFunds(amount) {
+export async function depositFunds(amountOrPayload, sourceOverride = "") {
+	const payload = amountOrPayload && typeof amountOrPayload === "object" ? amountOrPayload : null;
+	const amount = payload ? payload.amount : amountOrPayload;
+	const source = (payload?.source || sourceOverride || "").trim();
 	const value = Number.parseFloat(amount);
 	if (!Number.isFinite(value) || value <= 0) {
 		throw new Error("Invalid deposit amount.");
 	}
 	const state = loadWalletState();
+	const label = source ? `Top up from ${source}` : "Wallet deposit";
 	const next = {
 		...state,
 		balance: state.balance + value,
 		transactions: [
-			createTransaction({ type: "Deposit", label: "Wallet deposit", amount: value }),
+			createTransaction({ type: "Deposit", label, amount: value }),
 			...state.transactions,
 		],
 	};
@@ -127,3 +131,27 @@ export async function payBill({ serviceId, serviceName, amount = 0 }) {
 	return withLatency(next);
 }
 
+export async function withdrawFunds({ amount, destination }) {
+	const value = Number.parseFloat(amount);
+	if (!destination || !destination.trim()) {
+		throw new Error("Withdrawal destination is required.");
+	}
+	if (!Number.isFinite(value) || value <= 0) {
+		throw new Error("Invalid withdrawal amount.");
+	}
+	const state = loadWalletState();
+	if (value > state.balance) {
+		throw new Error("Insufficient balance.");
+	}
+	const label = `Withdraw to ${destination.trim()}`;
+	const next = {
+		...state,
+		balance: state.balance - value,
+		transactions: [
+			createTransaction({ type: "Withdraw", label, amount: -value }),
+			...state.transactions,
+		],
+	};
+	saveWalletState(next);
+	return withLatency(next);
+}

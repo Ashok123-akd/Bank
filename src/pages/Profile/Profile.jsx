@@ -53,15 +53,15 @@ export default function Profile() {
         </div>
         <div className="hero-logo">
           <img
-            src="/logo.png"
-            alt="logo"
+            src="/logo.jpeg"
+            alt="KathmanduWallet logo"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/fallback-logo.svg";
             }}
           />
           <div>
-            <div className="hero-caption">Bank of Kathmandu</div>
+            <div className="hero-caption">KathmanduWallet</div>
             <div className="hero-sub">Official identity mark</div>
           </div>
         </div>
