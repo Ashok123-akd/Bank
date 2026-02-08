@@ -26,8 +26,8 @@
   position: absolute;
   right: -80px;
   top: -50px;
-  width: 220px;
-  height: 220px;
+  width: 820px;
+  height: 312px;
   border-radius: 50%;
   background: radial-gradient(circle at center, var(--blush), transparent 70%);
   opacity: 0.8;
